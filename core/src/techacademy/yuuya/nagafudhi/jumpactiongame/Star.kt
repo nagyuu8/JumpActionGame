@@ -15,6 +15,9 @@ class Star(texture: Texture, srcX: Int, srcY: Int, srcWidth: Int, srcHeight: Int
     }
     var mState : Int = 0
 
+    /**
+     *
+      */
     init {
         setSize(STAR_WIDHT, STAR_HEIGHT)
         mState = STAR_EXIST

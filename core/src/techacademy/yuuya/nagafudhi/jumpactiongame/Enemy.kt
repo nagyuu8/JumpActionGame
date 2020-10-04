@@ -1,9 +1,10 @@
 package techacademy.yuuya.nagafudhi.jumpactiongame
 
+import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Texture
 
-class Enemy(texture: Texture, srcX: Int, srcY: Int, srcWidth: Int, srcHeight: Int) : GameObject(texture, srcX, srcY, srcWidth, srcHeight) {
-
+class Enemy(texture: Texture, srcX: Int, srcY: Int, srcWidth: Int, srcHeight: Int,hitSound:Sound) : GameObject(texture, srcX, srcY, srcWidth, srcHeight) {
+        val hitSound = hitSound
     companion object{
         //横幅・高さ
         val ENEMY_WIDHT = 0.8f
@@ -21,6 +22,7 @@ class Enemy(texture: Texture, srcX: Int, srcY: Int, srcWidth: Int, srcHeight: In
     }
     fun hit(){
         mState =  ENEMY_NONE
+        hitSound.play()
         setAlpha(0f)
     }
 }

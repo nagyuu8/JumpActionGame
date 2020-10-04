@@ -3,6 +3,7 @@ package techacademy.yuuya.nagafudhi.jumpactiongame
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Preferences
 import com.badlogic.gdx.ScreenAdapter
+import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
@@ -164,9 +165,12 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
         //テクスチャの準備
         val stepTexture = Texture("step.png")
         val starTexture = Texture("star.png")
-        val enemyTexture = Texture("enemy.png")
+        val enemyTexture = Texture("Enemy.png")
         val playerTexture = Texture("uma.png")
         val ufoTexture = Texture("ufo.png")
+
+        //衝突音の読み込み
+        val gameOverSound = Gdx.audio.newSound(Gdx.files.internal("high-a.mp3"))
 
         //StepとStarをゴーrの高さまで配置していく
         var y = 0f
@@ -179,15 +183,17 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
             val step = Step(type,stepTexture,0,0,144,36)
             step.setPosition(x,y)
             mSteps.add(step)
-
+            //Star発現
             if (mRandom.nextFloat() > 0.6f){
                 val star = Star(starTexture,0,0,72,72)
                 star.setPosition(step.x + mRandom.nextFloat(),step.y + Star.STAR_HEIGHT + mRandom.nextFloat() *3)
                 mStars.add(star)
             }
-            if (mRandom.nextFloat() > 0.6f){
-                val enemy = Enemy(enemyTexture,0,0,72,72)
+            //Enemy発現
+            if (mRandom.nextFloat() > 0.4f){
+                val enemy = Enemy(enemyTexture,0,0,64,64,gameOverSound )
                 enemy.setPosition(step.x + mRandom.nextFloat(),step.y+Enemy.ENEMY_HEIGHT+mRandom.nextFloat() * 3)
+                mEnemy.add(enemy)
             }
 
             y += (maxJumHeight - 0.5f)
@@ -319,7 +325,7 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
             if(mPlayer.boundingRectangle.overlaps(enemy.boundingRectangle)){
                 enemy.hit()
                 mGameState = GAME_STATE_GAMEOVER
-                return
+                break
             }
         }
         //Stepとの当たり判定
